@@ -4,11 +4,9 @@ import type { Writers } from "@prisma/client";
 
 import { db } from "~/utils/db.server";
 import { Link, useLoaderData } from "remix";
-import Index from ".";
 import StatBox from "~/components/statBox";
 import { Metronome, TrebleClef, MusicCircle } from "~/components/icons";
 import Neighbors from "~/components/neighborsListing";
-import { string } from "prop-types";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -22,17 +20,19 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   // If the wid can't be converted into a number, we'll just return a blank
-  // string and return the homepage again. TODO: Insert some sort of page can't
-  // be found error
+  // string and return the homepage again.
   try {
     intWid = Number(wid);
   } catch {
-    return "";
+    throw new Response("Not found", { status: 404 });
   }
 
   const result = await db.writers.findUnique({
     where: { wid: intWid },
   });
+  if (!result) {
+    throw new Response("Not found", { status: 404 });
+  }
 
   let matches;
   if (result?.matches) {

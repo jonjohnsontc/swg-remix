@@ -26,4 +26,8 @@
 - Pull writer records for each top match in neighbors
 - FE shows top 5 records
 
-#### Disecting writers to make easy dataset for app
+## What's Left (3/2/22)
+
+- [] Burger Toggle
+- [] Error handling for not found routes
+  - [] should duplicate not found / if it's easier to,will improve

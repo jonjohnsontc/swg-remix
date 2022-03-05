@@ -43,7 +43,11 @@ export default function App() {
           <Outlet />
         </div>
         <ScrollRestoration />
-        <Scripts />
+        {/* Disabling scripts for now
+        TODO: Do I want to put them back in?
+        I think I do, if I can preserve css animations b/w pages
+         */}
+        {/* <Scripts /> */}
         <LiveReload />
       </body>
     </html>
