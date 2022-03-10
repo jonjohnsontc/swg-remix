@@ -1,6 +1,6 @@
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction, MetaFunction } from "remix";
 
-import { Link, useLoaderData } from "remix";
+import { Link, useLoaderData, useSearchParams } from "remix";
 import Index from ".";
 import { db } from "~/utils/db.server";
 
@@ -57,6 +57,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   return writerResults;
 };
 
+export const meta: MetaFunction = () => {
+  const [data] = useSearchParams();
+  return { title: `Search Results for "${data.get("term")}" Songwriter Graph` };
+};
+
 export default function SearchResults() {
   const data = useLoaderData<LoaderData>();
 
@@ -108,7 +113,9 @@ export default function SearchResults() {
             <ul>
               {data.writers.map((writer) => (
                 <li key={writer.wid} className="writer-result">
-                  <Link to={`/writer?wid=${writer.wid}`}>
+                  <Link
+                    to={`/writer?wid=${writer.wid}&name=${writer.writerName}`}
+                  >
                     {writer.writerName}
                   </Link>
                 </li>

@@ -1,9 +1,8 @@
-import type { LoaderFunction } from "remix";
+import { LoaderFunction, MetaFunction, useSearchParams } from "remix";
 import type { Neighborhood } from "~/components/neighborsListing";
-import type { Writers } from "@prisma/client";
 
 import { db } from "~/utils/db.server";
-import { Link, useLoaderData } from "remix";
+import { useLoaderData } from "remix";
 import StatBox from "~/components/statBox";
 import { Metronome, TrebleClef, MusicCircle } from "~/components/icons";
 import Neighbors from "~/components/neighborsListing";
@@ -21,9 +20,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   // If the wid can't be converted into a number, we'll just return a blank
   // string and return the homepage again.
-  try {
-    intWid = Number(wid);
-  } catch {
+  intWid = Number(wid);
+  if (isNaN(intWid)) {
     throw new Response("Not found", { status: 404 });
   }
 
@@ -56,16 +54,19 @@ type LoaderData = {
   ipi: string;
   meanTempo: string;
   modeKey: string;
-  matches: {
-    wid: number;
-    name: string;
-    rank: number;
-  }[];
+  matches: Neighborhood;
+};
+
+export const meta: MetaFunction = () => {
+  // TODO: Can I use loader data to pull the writers name?
+  const [params] = useSearchParams();
+  return { title: `${params.get("name")} - Songwriter Graph` };
 };
 
 export default function Writer() {
   let data = useLoaderData<LoaderData>();
 
+  // We take up to the first 5 matches (if available) to show to the user
   let matches: Neighborhood;
   if (data.matches.length > 5) {
     matches = data.matches.slice(0, 5);
@@ -109,25 +110,6 @@ export default function Writer() {
   let roundTempo = Number(data.meanTempo).toFixed(2);
 
   return (
-    // (if (nil? neighbors)
-    // [loading-indicator]
-    // [:div.columns.is-centered.is-mobile
-    //  [:div.column.tile.is-ancestor.is-5-widescreen.is-half-desktop.is-full-mobile.is-three-quarters-tablet.writer-card
-    //   [:div.tile.is-vertical.is-parent
-    //    [:article.box.tile.is-child.pb-6.notification.is-primary
-    //     [:div.columns.is-mobile.is-vcentered
-    //      [:h1.title.is-size-4-mobile.is-size-2-tablet.column.is-two-thirds
-    //       (:writer_name writer)
-    //       [:p.subtitle.is-2.is-size-3-tablet.is-size-4-mobile (str "IPI: " (:ipi writer))]]
-    //      [ui/music-circle-icon {:size "33%" :class "column is-one-third"}]]
-    //     [:hr]
-    //     [:div.columns.is-mobile.is-centered.stat-panel.pt-3
-    //      [stat-box key "Primary Key(s)" ui/treble-clef-icon]
-    //      [:div.column.is-1]
-    //      [stat-box tempo "Avg Tempo" ui/tempo-icon]]
-    //     [:hr]
-    //     [neighbors-result-listing]]]]])))
-
     <div className="columns is-centered is-mobile">
       <div className="column tile is-ancestor is-5-widescreen is-half-desktop is-full-mobile is-three-quarters-tablet writer-card">
         <div className="tile is-vertical is-parent">

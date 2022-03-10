@@ -1,12 +1,4 @@
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-} from "remix";
+import { Links, LiveReload, Meta, Outlet, useLoaderData } from "remix";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 
 import Header from "./components/header";
@@ -26,6 +18,27 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 type LoaderData = string;
 
+export function CatchBoundary() {
+  return (
+    <html>
+      <head>
+        <title>Not Found - Songwriter Graph</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Header route="search" />
+        <div className="info-content">
+          <h1 className="subtitle">
+            Sorry, we couldn't find the page you're looking for.{" "}
+            <a href="/">Go Home</a>
+          </h1>
+        </div>
+      </body>
+    </html>
+  );
+}
+
 export default function App() {
   const path = useLoaderData<LoaderData>();
 
@@ -42,12 +55,6 @@ export default function App() {
         <div className="info-content">
           <Outlet />
         </div>
-        <ScrollRestoration />
-        {/* Disabling scripts for now
-        TODO: Do I want to put them back in?
-        I think I do, if I can preserve css animations b/w pages
-         */}
-        {/* <Scripts /> */}
         <LiveReload />
       </body>
     </html>

@@ -28,6 +28,7 @@
 
 ## What's Left (3/2/22)
 
-- [] Burger Toggle
-- [] Error handling for not found routes
-  - [] should duplicate not found / if it's easier to,will improve
+- [x] Burger Toggle
+- [x] Error handling for not found routes
+  - [x] should duplicate not found / if it's easier to,will improve
+- [x] Page titling

@@ -19,7 +19,7 @@
 }
 
 .info-content {
-  margin-top: 25px;
+  margin-top: 1em;
 }
 
 .logo {
@@ -30,6 +30,10 @@
   border-bottom-width: 2px;
   border-bottom-color: #bb6bd9;
   border-bottom-style: solid;
+}
+
+.search-results {
+  margin-left: 1em;
 }
 
 .search-and-prompt {
