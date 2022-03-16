@@ -7,7 +7,7 @@ export type Neighborhood = Array<{
 }>;
 
 const Neighbor = (props: { wid: number; name: string }) => {
-  let url = `/writer?wid=${props.wid}`;
+  let url = `/writer?wid=${props.wid}&name=${props.name}`;
 
   return (
     <li className="writer-result is-size-4" key={props.wid}>
